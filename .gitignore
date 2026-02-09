@@ -1,0 +1,4 @@
+*.jar
+.env
+data/
+ddclient/ddclient.conf

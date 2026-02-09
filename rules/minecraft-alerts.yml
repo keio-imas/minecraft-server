@@ -1,0 +1,75 @@
+groups:
+  - name: minecraft
+    rules:
+      - alert: MinecraftMetricsDown
+        expr: up{job="minecraft"} == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Minecraft metrics exporter DOWN"
+          description: "Prometheus cannot scrape mc_monitor (/metrics)."
+
+      - alert: MinecraftUnhealthy
+        expr: minecraft_status_healthy == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Minecraft server UNHEALTHY"
+          description: "mc-monitor reports the server is unreachable or unhealthy."
+
+      - alert: MinecraftSlowResponse
+        expr: minecraft_status_response_time_seconds > 1
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Minecraft server SLOW"
+          description: "Response time > 1s for over 1 minute."
+
+      - alert: MinecraftVerySlowResponse
+        expr: minecraft_status_response_time_seconds > 3
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Minecraft server VERY SLOW"
+          description: "Response time > 3s. Severe lag or near-freeze."
+
+      - alert: MinecraftServerFull
+        expr: minecraft_status_players_online_count >= minecraft_status_players_max_count
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: "Minecraft server FULL"
+          description: "Online players reached max player count."
+
+      - alert: MinecraftNearlyFull
+        expr: minecraft_status_players_online_count >= (minecraft_status_players_max_count * 0.9)
+        for: 1m
+        labels:
+          severity: info
+        annotations:
+          summary: "Minecraft server nearly full"
+          description: "Online players >= 90% of max capacity."
+
+      - alert: MinecraftIdle
+        expr: minecraft_status_players_online_count == 0
+        for: 30m
+        labels:
+          severity: info
+        annotations:
+          summary: "Minecraft server IDLE"
+          description: "No players online for 30 minutes."
+
+      - alert: MinecraftRecovered
+        expr: minecraft_status_healthy == 1
+        for: 1m
+        labels:
+          severity: info
+        annotations:
+          summary: "Minecraft server RECOVERED"
+          description: "Server is healthy again."
+

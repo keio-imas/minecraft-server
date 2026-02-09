@@ -1,0 +1,17 @@
+daemon=300 # 5 min * 60 sec
+syslog=yes
+ssl=yes
+
+# Get public IPv4 address
+use=web, web=ipify-ipv4
+
+# Cloudflare Configuration
+protocol=cloudflare
+zone=
+ttl=1
+
+login=
+password=
+
+// FQDN
+kmas.horizon2k38.com
